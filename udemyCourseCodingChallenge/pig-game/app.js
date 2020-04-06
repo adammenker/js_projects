@@ -12,12 +12,13 @@ GAME RULES:
 
 
 
-let scores, roundScore, activePlayer, gamePlaying;
+let scores, roundScore, activePlayer, gamePlaying, prevRoll;
+let endScore = 100;
 
 init();
 
 
-//document.querySelector('#current-' + activePlayer).textContent = dice;
+
 
 
 
@@ -28,6 +29,8 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         var diceDOM = document.querySelector('.dice');
         diceDOM.style.display = 'block';
         diceDOM.src = 'dice-' + dice + '.png';
+
+        doubleSix(dice);
 
         if(dice > 1){
             roundScore += dice;
@@ -45,7 +48,7 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
         scores[activePlayer] += roundScore;
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
-        if(scores[activePlayer] >= 100){
+        if(scores[activePlayer] >= endScore){
             document.querySelector('#name-' + activePlayer).textContent = 'Winner';
             document.querySelector('.dice').style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
@@ -61,11 +64,31 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
 
 function nextPlayer(){
     roundScore = 0;
+    prevRoll = 0;
         document.querySelector('#current-' + activePlayer).textContent = roundScore;
         activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
 
         document.querySelector('.player-0-panel').classList.toggle('active');
         document.querySelector('.player-1-panel').classList.toggle('active');
+}
+
+function doubleSix(dice){
+    if(prevRoll === 6 && dice === 6){
+        console.log('activate!!');
+        console.log(scores);
+        scores[activePlayer] = 0;
+        console.log(scores);
+        prevRoll = 0;
+        document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer]
+        nextPlayer();
+    }
+
+    if(dice === 6){
+        prevRoll = 6;
+    }
+    else{
+        prevRoll = 0;
+    }
 }
 
 
@@ -89,6 +112,8 @@ function init(){
     document.querySelector('.player-0-panel').classList.remove('active');
     document.querySelector('.player-1-panel').classList.remove('active');
     document.querySelector('.player-0-panel').classList.add('active');
+}
 
-
+function pprint(){
+    endScore = document.getElementById("inputVal").value;
 }

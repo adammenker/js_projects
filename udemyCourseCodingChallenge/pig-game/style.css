@@ -103,6 +103,27 @@ body {
     font-size: 30px;
 }
 
+.inputField {
+    position: absolute;
+    bottom: 10%;
+    left: 43%;
+    width: 150px;
+    height: 30px;
+}
+.inputField2 {
+    position: absolute;
+    bottom: 3%;
+    left: 43%;
+    width: 150px;
+    height: 30px;
+}
+
+.inputFieldDescription{
+    position: absolute;
+    bottom: 7%;
+    left: 42%;
+}
+
 button {
     position: absolute;
     width: 200px;
