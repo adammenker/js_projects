@@ -50,24 +50,23 @@ class Group{
 
 }
 
-
 class GroupIterator {
     constructor(group) {
-      this.group = group;
-      this.position = 0;
+        this.group = group;
+        this.position = 0;
     }
-  
+
     next() {
-      if (this.position >= this.group.group.length) {
-        return {done: true};
-      } else {
-        let result = {value: this.group.group[this.position],
-                      done: false};
-        this.position++;
-        return result;
-      }
+        if (this.position >= this.group.group.length) {
+            
+    } 
+        else {
+            let result = {value: this.group.group[this.position], done: false};
+            this.position++;
+            return result;
+        }
     }
-  }
+}
 
 
 
