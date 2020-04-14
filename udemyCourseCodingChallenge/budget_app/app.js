@@ -5,24 +5,36 @@ var budgetController = (function(){
         this.id = id;
         this.description = description;
         this.value = value;
-    }
+    };
 
     var Income = function(id, description, value){
         this.id = id;
         this.description = description;
         this.value = value;
-    }
+    };
+
+    var calculateTotal = function(type){
+        var sum = 0;
+
+        data.allItems[type].forEach(function(current){
+            sum += current.value
+        });
+
+        data.totals[type] = sum;
+    };
 
     var data  = {
         allItems: {
             inc: [],
             exp: []
         },
-        Totals: {
+        totals: {
             inc: 0,
             exp: 0
-        }
-    }
+        },
+        budget: 0,
+        percentage: -1,
+    };
 
     return{
         addItem: function(type, desc, val) {
@@ -42,7 +54,34 @@ var budgetController = (function(){
 
             data.allItems[type].push(newItem);
             return newItem;
-        }, 
+        },
+
+
+        calculateBudget: function() {
+
+            // calculate total income and exp
+            calculateTotal('exp');
+            calculateTotal('inc');
+            // calc budget: inc - exp
+            data.budget = data.totals.inc - data.totals.exp;
+            // calculate percentage of income that an expense is
+            if(data.totals.inc > 0){
+                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+            }else{
+                data.percentage = -1;
+            }
+        },
+
+
+        getBudget: function() {
+            return {
+                budget: data.budget,
+                totalIncome: data.totals.inc,
+                totalExpenses: data.totals.exp,
+                percentage: data.percentage
+            }
+        },
+
 
         testing: function(){
             console.log(data);
@@ -68,7 +107,7 @@ var UIController = (function(){
             return{
                 type: document.querySelector(DOMstrings.inputType).value,
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                value: document.querySelector(DOMstrings.inputValue).value
+                value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
             }
 
         },
@@ -97,6 +136,22 @@ var UIController = (function(){
 
         },
 
+
+        clearField: function(){
+            var fields, fieldsArr;
+
+            fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+
+            fieldsArr = Array.prototype.slice.call(fields);
+
+            fieldsArr.forEach(function(current, index, array) {
+                current.value = '';
+            });
+            
+            fieldsArr[0].focus();
+        },
+
+
         getDOMstrings: function() {
             return DOMstrings;
         }
@@ -121,18 +176,34 @@ var controller = (function(budgetCtrl, UICtrl){
         })
     }
 
+
+    var updateBudget = function() {
+        // calc budget
+        budgetCtrl.calculateBudget();
+
+        // return budget
+        var budget = budgetCtrl.getBudget();
+        console.log(budget);
+
+        // display budget
+    }
+
+
     var ctrlAddItem = function(){
         var input, newItem;
         // get data
         input = UICtrl.getInput();
-        // add item to budget controller
-        newItem = budgetCtrl.addItem(input.type, input.description, input.value);
-        // add item to UI
-        UIController.addListItem(newItem, input.type);
-        // calc budget
 
-        // display budget on ui
-
+        if(input.description !== '' && !isNaN(input.value) && input.value > 0){
+            // add item to budget controller
+            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+            // add item to UI
+            UIController.addListItem(newItem, input.type);
+            // ckear fieds
+            UIController.clearField();
+            // calc budget and display budget on ui
+            updateBudget();
+        }
     }
 
     return {
