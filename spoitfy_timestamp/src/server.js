@@ -1,18 +1,25 @@
 const http = require('http');
 const fs = require('fs');
-const path = require('path');
 
-http.createServer(function (req, res) {
-    //NOTE: This assumes your index.html file is in the 
-    // .    same location as your root application.
-    const filePath = path.join(__dirname, 'index.html');
-    const stat = fs.statSync(filePath);
+const port = 3000;
 
-    res.writeHead(200, {
-        'Content-Type': 'text/html',
-        'Content-Length': stat.size
-    });
+const server = http.createServer(function (req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    fs.readFile('../index.html', function(error, data) {
+        if(error) {
+            res.writeHead(404);
+            res.writeHead('Error: File Not Found');
+        } else {
+            res.write(data);
+        }
+        res.end();
+    })
+});
 
-    var stream = fs.createReadStream(filePath);
-    stream.pipe(res);
-}).listen(8080);
+server.listen(port, function(error) {
+    if(error) {
+        console.log('something went wrong', error);
+    } else {
+        console.log('Server is listenting on port ' + port);
+    }
+});
