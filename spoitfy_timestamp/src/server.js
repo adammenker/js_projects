@@ -13,7 +13,7 @@ const server = http.createServer(function (req, res) {
             res.write(data);
         }
         res.end();
-    })
+    });
 });
 
 server.listen(port, function(error) {
@@ -23,3 +23,13 @@ server.listen(port, function(error) {
         console.log('Server is listenting on port ' + port);
     }
 });
+
+
+// var static = require('node-static');
+// var http = require('http');
+
+// var file = new(static.Server)();
+
+// http.createServer(function (req, res) {
+//   file.serve(req, res);
+// }).listen(8080);

@@ -9,6 +9,7 @@ function start() {
     let token = window.location.hash.substr(1);
     if(token){
         const o = Object.fromEntries(new URLSearchParams(token));
+        console.log(o.access_token);
         return o.access_token;
     } else {
         redirectToSpotifyAuthentication();
