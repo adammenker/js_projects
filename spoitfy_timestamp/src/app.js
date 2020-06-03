@@ -1,8 +1,6 @@
 
 
 
-
-
 alert("script linked");
 
 function start() {
@@ -12,6 +10,7 @@ function start() {
         console.log(o.access_token);
         return o.access_token;
     } else {
+        console.log("got to this point");
         redirectToSpotifyAuthentication();
     }
 }
@@ -19,14 +18,15 @@ function start() {
 function redirectToSpotifyAuthentication() {
     const authEndpoint = 'http://accounts.spotify.com/authorize';
     const clientId = '08c410b321d6487cb0217d6fceff8dc4'
-    const redirectUri = `http://localhost:3000`;
-    let query = `client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&show_dialog=true&scope=user-read-private%20user-read-email`
+    const redirectUri = `http://localhost:3000/`;
+    let query = `client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&show_dialog=true&scope=user-read-private%20user-read-email`
     window.location = `${authEndpoint}?${query}`;
 }
 
 const token = start();
+console.log(`${window.location.hash}`);
 
-console.log(token);
+console.log("got to this point");
 
 
 

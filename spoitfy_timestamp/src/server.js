@@ -1,12 +1,22 @@
 const http = require('http');
+const url = require('url');
 const fs = require('fs');
 
 const port = 3000;
 
+// __dirname + req.url
+
+// the problem is that the req.url is /src directory when it need to be the app.js file
+
 const server = http.createServer(function (req, res) {
+    console.log("###" + __dirname + req.url + '\n');
+    console.log(Object.keys(req));
+    console.log(url);
+
     res.writeHead(200, { 'Content-Type': 'text/html' });
-    fs.readFile('../index.html', function(error, data) {
+    fs.readFile(req.url , function (error, data) {
         if(error) {
+            console.log(error);
             res.writeHead(404);
             res.writeHead('Error: File Not Found');
         } else {
