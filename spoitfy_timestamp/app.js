@@ -18,7 +18,7 @@ function start() {
 function redirectToSpotifyAuthentication() {
     const authEndpoint = 'http://accounts.spotify.com/authorize';
     const clientId = '08c410b321d6487cb0217d6fceff8dc4'
-    const redirectUri = `http://localhost:3000/`;
+    const redirectUri = `http://localhost:3000/index.html`;
     let query = `client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&show_dialog=true&scope=user-read-private%20user-read-email`
     window.location = `${authEndpoint}?${query}`;
 }
